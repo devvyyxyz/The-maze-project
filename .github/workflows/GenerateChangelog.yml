@@ -1,0 +1,38 @@
+name: Generate Changelog
+
+on:
+  push:
+    branches:
+      - main  # Change this to the default branch of your repo, if needed
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0, v2.0.0, etc.
+
+jobs:
+  generate-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby (for changelog generator)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'  # Ruby 3.0, as required by dependencies
+
+      - name: Install dependencies
+        run: |
+          gem install github_changelog_generator
+
+      - name: Generate Changelog
+        run: |
+          github_changelog_generator --user ${{ github.repository_owner }} --project Docs --output CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Pass the token for authentication
+
+      - name: Commit and push changelog
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "Update changelog for release ${{ github.ref }}"
+          git push
