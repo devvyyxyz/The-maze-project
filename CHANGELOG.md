@@ -1,5 +1,53 @@
 # Changelog
 
+## [v2.5.5](https://github.com/devvyyxyz/Docs/tree/v2.5.5) (2024-12-17)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v2.5.3...v2.5.5)
+
+## [v2.5.3](https://github.com/devvyyxyz/Docs/tree/v2.5.3) (2024-12-15)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v2.5.1...v2.5.3)
+
+## [v2.5.1](https://github.com/devvyyxyz/Docs/tree/v2.5.1) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.4.9...v2.5.1)
+
+## [v1.4.9](https://github.com/devvyyxyz/Docs/tree/v1.4.9) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.4.7...v1.4.9)
+
+## [v1.4.7](https://github.com/devvyyxyz/Docs/tree/v1.4.7) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.4.6...v1.4.7)
+
+## [v1.4.6](https://github.com/devvyyxyz/Docs/tree/v1.4.6) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.4.5...v1.4.6)
+
+## [v1.4.5](https://github.com/devvyyxyz/Docs/tree/v1.4.5) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.4.4...v1.4.5)
+
+## [v1.4.4](https://github.com/devvyyxyz/Docs/tree/v1.4.4) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.4.3...v1.4.4)
+
+## [v1.4.3](https://github.com/devvyyxyz/Docs/tree/v1.4.3) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.4.1...v1.4.3)
+
+## [v1.4.1](https://github.com/devvyyxyz/Docs/tree/v1.4.1) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.3.9...v1.4.1)
+
+## [v1.3.9](https://github.com/devvyyxyz/Docs/tree/v1.3.9) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.3.7...v1.3.9)
+
+## [v1.3.7](https://github.com/devvyyxyz/Docs/tree/v1.3.7) (2024-12-11)
+
+[Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.3.5...v1.3.7)
+
 ## [v1.3.5](https://github.com/devvyyxyz/Docs/tree/v1.3.5) (2024-12-10)
 
 [Full Changelog](https://github.com/devvyyxyz/Docs/compare/v1.3.3...v1.3.5)
