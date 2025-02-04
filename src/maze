@@ -1,3 +1,0 @@
-def generate_maze():
-    # This function will later generate a maze dynamically
-    return [[0] * 10 for _ in range(10)]  # Placeholder 10x10 open grid

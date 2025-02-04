@@ -1,6 +1,0 @@
-import pygame
-
-def show_main_menu():
-    print("1. Start Game\n2. Quit")
-    choice = input("Select an option: ")
-    return "start" if choice == "1" else "quit"
