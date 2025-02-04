@@ -1,0 +1,24 @@
+import pygame
+from maze import generate_maze
+from player import Player
+
+def start_game():
+    screen = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("Maze Race")
+
+    # Generate maze and create players
+    maze = generate_maze()
+    player1 = Player(1, (255, 0, 0))  # Red player
+    player2 = Player(2, (0, 0, 255))  # Blue player
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        
+        # Game logic and drawing will be added here
+        
+        pygame.display.flip()
+    
+    pygame.quit()
