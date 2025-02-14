@@ -9,12 +9,12 @@ def show_menu(screen):
     option_font = pygame.font.Font(FONT_PATH, 40)
     
     # Render the game title.
-    title_text = title_font.render("Maze Race", True, (255, 215, 0))  # Gold color
+    title_text = title_font.render("MOTHERBOARD MAYHEM", True, (255, 215, 0))  # Gold color
     base_y = 150  # Base Y position for the title.
     title_rect = title_text.get_rect(center=(screen.get_width() // 2, base_y))
     
     # Define your menu options.
-    options = ["Start", "Settings", "Exit"]
+    options = ["START", "SETTINGS", "EXIT"]
     option_surfaces = []
     option_rects = []
     
