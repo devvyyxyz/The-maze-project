@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 
 def show_menu(screen):
     FONT_PATH = os.path.join("assets", "fonts", "Daydream.ttf") 
@@ -9,7 +10,8 @@ def show_menu(screen):
     
     # Render the game title.
     title_text = title_font.render("Maze Race", True, (255, 215, 0))  # Gold color
-    title_rect = title_text.get_rect(center=(screen.get_width() // 2, 150))
+    base_y = 150  # Base Y position for the title.
+    title_rect = title_text.get_rect(center=(screen.get_width() // 2, base_y))
     
     # Define your menu options.
     options = ["Start", "Settings", "Exit"]
@@ -31,6 +33,14 @@ def show_menu(screen):
     
     while True:
         screen.fill((0, 0, 0))
+        
+        # Update title bobbing: calculate an offset based on the sine of time.
+        t = pygame.time.get_ticks() / 1000.0  # current time in seconds
+        amplitude = 10  # pixels to move up and down
+        frequency = 0.5  # cycles per second
+        offset = amplitude * math.sin(2 * math.pi * frequency * t)
+        title_rect.centery = base_y + offset
+
         # Draw the title.
         screen.blit(title_text, title_rect)
         
@@ -40,8 +50,7 @@ def show_menu(screen):
         # Draw options. Highlight option if mouse is hovering.
         for i, option in enumerate(options):
             if option_rects[i].collidepoint(mouse_pos):
-                # Use a highlight color when hovering.
-                text_color = (0, 255, 0)
+                text_color = (0, 255, 0)  # highlight with green
                 selected = i  # update selected index based on hover
             else:
                 text_color = (255, 255, 255)
