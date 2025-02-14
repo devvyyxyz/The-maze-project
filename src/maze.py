@@ -1,56 +1,85 @@
-# maze.py
 import random
 import pygame
-from vars import WHITE, BLACK, CELL_SIZE, ROWS, COLS, DIRECTIONS, screen
-from collections import deque
 
+class Cell:
+    def __init__(self, row, col):
+        self.row = row
+        self.col = col
+        self.walls = {"top": True, "right": True, "bottom": True, "left": True}
+        self.visited = False
 
+class Maze:
+    def __init__(self, rows, cols, tile_size):
+        self.rows = rows
+        self.cols = cols
+        self.tile_size = tile_size
+        # Create a 2D grid of cells.
+        self.grid = [[Cell(row, col) for col in range(cols)] for row in range(rows)]
+        self.generate_maze()
 
-def generate_maze(rows, cols, difficulty):
-    maze = [[1 for _ in range(cols)] for _ in range(rows)]
+    def generate_maze(self):
+        stack = []
+        current = self.grid[0][0]
+        current.visited = True
+        total_cells = self.rows * self.cols
+        visited_cells = 1
 
-    def carve_path(x, y):
-        maze[y][x] = 0
-        random.shuffle(DIRECTIONS)
-        for dx, dy in DIRECTIONS:
-            nx, ny = x + dx, y + dy
-            if 0 < nx < cols - 1 and 0 < ny < rows - 1 and maze[ny][nx] == 1:
-                maze[y + dy // 2][x + dx // 2] = 0  # Remove wall between cells
-                carve_path(nx, ny)
+        while visited_cells < total_cells:
+            neighbors = self.get_unvisited_neighbors(current)
+            if neighbors:
+                next_cell = random.choice(neighbors)
+                self.remove_walls(current, next_cell)
+                stack.append(current)
+                current = next_cell
+                current.visited = True
+                visited_cells += 1
+            elif stack:
+                current = stack.pop()
 
-    carve_path(1, 1)
-    maze[ROWS // 2][COLS // 2] = 0  # Ensure center is always reachable
+    def get_unvisited_neighbors(self, cell):
+        neighbors = []
+        r, c = cell.row, cell.col
+        # Top neighbor
+        if r > 0 and not self.grid[r - 1][c].visited:
+            neighbors.append(self.grid[r - 1][c])
+        # Right neighbor
+        if c < self.cols - 1 and not self.grid[r][c + 1].visited:
+            neighbors.append(self.grid[r][c + 1])
+        # Bottom neighbor
+        if r < self.rows - 1 and not self.grid[r + 1][c].visited:
+            neighbors.append(self.grid[r + 1][c])
+        # Left neighbor
+        if c > 0 and not self.grid[r][c - 1].visited:
+            neighbors.append(self.grid[r][c - 1])
+        return neighbors
 
-    # Add difficulty by adding walls, but ensure solvability
-    def is_solvable(start, end):
-        visited = set()
-        queue = deque([start])
-        while queue:
-            x, y = queue.popleft()
-            if (x, y) == end:
-                return True
-            if (x, y) in visited:
-                continue
-            visited.add((x, y))
-            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                nx, ny = x + dx, y + dy
-                if 0 <= nx < cols and 0 <= ny < rows and maze[ny][nx] == 0:
-                    queue.append((nx, ny))
-        return False
+    def remove_walls(self, current, next_cell):
+        dx = next_cell.col - current.col
+        dy = next_cell.row - current.row
+        if dx == 1:  # next is to the right
+            current.walls["right"] = False
+            next_cell.walls["left"] = False
+        elif dx == -1:  # next is to the left
+            current.walls["left"] = False
+            next_cell.walls["right"] = False
+        if dy == 1:  # next is below
+            current.walls["bottom"] = False
+            next_cell.walls["top"] = False
+        elif dy == -1:  # next is above
+            current.walls["top"] = False
+            next_cell.walls["bottom"] = False
 
-    # Add walls but ensure paths from players to center remain
-    for _ in range(difficulty * 5):
-        rand_x, rand_y = random.randint(1, cols - 2), random.randint(1, rows - 2)
-        if maze[rand_y][rand_x] == 0:
-            maze[rand_y][rand_x] = 1
-            if not (is_solvable((1, 1), (COLS // 2, ROWS // 2)) and is_solvable((COLS - 2, ROWS - 2),
-                                                                                (COLS // 2, ROWS // 2))):
-                maze[rand_y][rand_x] = 0  # Revert if maze becomes unsolvable
-
-    return maze
-
-def draw_maze(maze):
-    for i in range(len(maze)):
-        for j in range(len(maze[i])):
-            color = BLACK if maze[i][j] == 1 else WHITE
-            pygame.draw.rect(screen, color, (j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+    def draw(self, screen):
+        # Draw each cell’s walls.
+        for row in self.grid:
+            for cell in row:
+                x = cell.col * self.tile_size
+                y = cell.row * self.tile_size
+                if cell.walls["top"]:
+                    pygame.draw.line(screen, (255, 255, 255), (x, y), (x + self.tile_size, y), 2)
+                if cell.walls["right"]:
+                    pygame.draw.line(screen, (255, 255, 255), (x + self.tile_size, y), (x + self.tile_size, y + self.tile_size), 2)
+                if cell.walls["bottom"]:
+                    pygame.draw.line(screen, (255, 255, 255), (x + self.tile_size, y + self.tile_size), (x, y + self.tile_size), 2)
+                if cell.walls["left"]:
+                    pygame.draw.line(screen, (255, 255, 255), (x, y + self.tile_size), (x, y), 2)
