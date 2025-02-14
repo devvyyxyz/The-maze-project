@@ -1,9 +1,11 @@
 import pygame
+import os
 
 def show_menu(screen):
+    FONT_PATH = os.path.join("assets", "fonts", "Daydream.ttf") 
     # Fonts for title and menu options.
-    title_font = pygame.font.SysFont("Arial", 60)
-    option_font = pygame.font.SysFont("Arial", 40)
+    title_font = pygame.font.Font(FONT_PATH, 60)
+    option_font = pygame.font.Font(FONT_PATH, 40)
     
     # Render the game title.
     title_text = title_font.render("Maze Race", True, (255, 215, 0))  # Gold color
