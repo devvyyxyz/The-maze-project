@@ -3,8 +3,9 @@ from maze import Maze
 from player import Player
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, settings):
         self.screen = screen
+        self.settings = settings
         self.tile_size = 40  # Adjust as desired
         self.rows = self.screen.get_height() // self.tile_size
         self.cols = self.screen.get_width() // self.tile_size
