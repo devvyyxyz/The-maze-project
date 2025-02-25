@@ -9,12 +9,12 @@ def show_menu(screen):
     option_font = pygame.font.Font(FONT_PATH, 40)
     
     # Render the game title.
-    title_text = title_font.render("MOTHERBOARD MAYHEM", True, (255, 215, 0))  # Gold color
+    title_text = title_font.render("Maze Race", True, (255, 215, 0))  # Gold color
     base_y = 150  # Base Y position for the title.
     title_rect = title_text.get_rect(center=(screen.get_width() // 2, base_y))
     
     # Define your menu options.
-    options = ["START", "SETTINGS", "EXIT"]
+    options = ["Start", "Settings", "Exit"]
     option_surfaces = []
     option_rects = []
     
@@ -34,10 +34,10 @@ def show_menu(screen):
     while True:
         screen.fill((0, 0, 0))
         
-        # Update title bobbing: calculate an offset based on the sine of time.
-        t = pygame.time.get_ticks() / 1000.0  # current time in seconds
-        amplitude = 10  # pixels to move up and down
-        frequency = 0.5  # cycles per second
+        # Update title bobbing using a sine function.
+        t = pygame.time.get_ticks() / 1000.0  # Time in seconds.
+        amplitude = 10  # Pixels to move up/down.
+        frequency = 0.5  # Cycles per second.
         offset = amplitude * math.sin(2 * math.pi * frequency * t)
         title_rect.centery = base_y + offset
 
@@ -47,11 +47,11 @@ def show_menu(screen):
         # Get current mouse position.
         mouse_pos = pygame.mouse.get_pos()
         
-        # Draw options. Highlight option if mouse is hovering.
+        # Draw options and highlight if hovered.
         for i, option in enumerate(options):
             if option_rects[i].collidepoint(mouse_pos):
-                text_color = (0, 255, 0)  # highlight with green
-                selected = i  # update selected index based on hover
+                text_color = (0, 255, 0)  # Highlight with green.
+                selected = i
             else:
                 text_color = (255, 255, 255)
             option_surf = option_font.render(option, True, text_color)
@@ -70,7 +70,7 @@ def show_menu(screen):
                 elif event.key == pygame.K_RETURN:
                     return options[selected].lower()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # left mouse button
+                if event.button == 1:  # Left mouse button.
                     for i, rect in enumerate(option_rects):
                         if rect.collidepoint(event.pos):
                             return options[i].lower()

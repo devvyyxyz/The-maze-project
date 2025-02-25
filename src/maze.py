@@ -9,13 +9,14 @@ class Cell:
         self.visited = False
 
 class Maze:
-    def __init__(self, rows, cols, tile_size):
+    def __init__(self, rows, cols, tile_size, generate=True):
         self.rows = rows
         self.cols = cols
         self.tile_size = tile_size
         # Create a 2D grid of cells.
         self.grid = [[Cell(row, col) for col in range(cols)] for row in range(rows)]
-        self.generate_maze()
+        if generate:
+            self.generate_maze()
 
     def generate_maze(self):
         stack = []
