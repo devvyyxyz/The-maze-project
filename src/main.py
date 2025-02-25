@@ -46,6 +46,7 @@ def main():
         result, updated_settings = settings_menu.run()
         settings.update(updated_settings)
 
+
         # Apply resolution/fullscreen immediately
         if updated_settings["fullscreen"]:
             screen = pygame.display.set_mode(updated_settings["resolution"], pygame.FULLSCREEN)
