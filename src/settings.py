@@ -13,19 +13,15 @@ class SettingsMenu:
         self.volume = self.settings.get("volume", 50)
         self.update_handle_position()
 
-        # New settings options
+        # Resolutions
         self.resolutions = [(800, 600), (1024, 768), (1280, 720), (1920, 1080)]
-        self.current_resolution_index = self.resolutions.index(self.settings.get("resolution", (800, 800)))
+        default_resolution = (800, 600)  # Ensure a valid resolution
+        self.current_resolution_index = self.resolutions.index(self.settings.get("resolution", default_resolution))
+        self.settings["resolution"] = self.resolutions[self.current_resolution_index]  # Ensure valid setting
 
         self.fullscreen = self.settings.get("fullscreen", False)
-        self.keybindings = {
-            "move_up": self.settings.get("move_up", "UP"),
-            "move_down": self.settings.get("move_down", "DOWN"),
-            "move_left": self.settings.get("move_left", "LEFT"),
-            "move_right": self.settings.get("move_right", "RIGHT")
-        }
 
-        self.options = ["Volume", "Resolution", "Fullscreen", "Keybindings", "Back"]
+        self.options = ["Volume", "Resolution", "Fullscreen", "Apply", "Back"]
         self.selected_option = 0
 
     def update_handle_position(self):
@@ -44,18 +40,16 @@ class SettingsMenu:
         self.settings["fullscreen"] = self.fullscreen
 
     def change_resolution(self):
+        """Cycle through available resolutions."""
         self.current_resolution_index = (self.current_resolution_index + 1) % len(self.resolutions)
         self.settings["resolution"] = self.resolutions[self.current_resolution_index]
 
-    def change_keybinding(self, key_name):
-        """Prompts the user to press a key and updates keybinding."""
-        waiting_for_key = True
-        while waiting_for_key:
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    self.keybindings[key_name] = pygame.key.name(event.key).upper()
-                    self.settings[key_name] = self.keybindings[key_name]
-                    waiting_for_key = False
+    def apply_changes(self):
+        """Apply resolution and fullscreen settings."""
+        if self.settings["fullscreen"]:
+            self.screen = pygame.display.set_mode(self.settings["resolution"], pygame.FULLSCREEN)
+        else:
+            self.screen = pygame.display.set_mode(self.settings["resolution"])  # Windowed mode
 
     def run(self):
         clock = pygame.time.Clock()
@@ -101,8 +95,8 @@ class SettingsMenu:
                             self.change_resolution()
                         elif self.options[self.selected_option] == "Fullscreen":
                             self.toggle_fullscreen()
-                        elif self.options[self.selected_option] == "Keybindings":
-                            self.change_keybinding("move_up")  # Example: Change UP key
+                        elif self.options[self.selected_option] == "Apply":
+                            self.apply_changes()
                         elif self.options[self.selected_option] == "Back":
                             self.running = False
 
