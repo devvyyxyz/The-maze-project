@@ -36,8 +36,9 @@ class SettingsMenu:
         self.update_handle_position()
 
     def toggle_fullscreen(self):
-        self.fullscreen = not self.fullscreen
-        self.settings["fullscreen"] = self.fullscreen
+        self.settings.setdefault("fullscreen", False)  # Ensure fullscreen key exists
+        self.fullscreen = self.settings["fullscreen"]
+
 
     def change_resolution(self):
         """Cycle through available resolutions."""
