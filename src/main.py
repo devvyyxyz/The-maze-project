@@ -1,5 +1,6 @@
 import pygame
 import os
+from utils import wrap_text
 from menu import show_menu
 from instructions import show_instructions
 from game import Game

@@ -2,6 +2,7 @@ import pygame
 from maze import Maze
 from player import Player
 from skin_manager import SkinManager  # For loading skins
+from utils import wrap_text
 
 class Game:
     def __init__(self, screen, settings):
@@ -128,15 +129,41 @@ class Game:
         pygame.display.flip()
 
     def game_over(self):
-        self.screen.fill((0, 0, 0))
-        text_surface = self.font.render("Game Over! Press any key to exit.", True, (255, 255, 255))
-        self.screen.blit(text_surface, (50, self.screen.get_height() // 2))
+        # Load and scale background image
+        bg_path = os.path.join("assets", "endgame.png")
+        bg_img = pygame.image.load(bg_path).convert()
+        bg_img = pygame.transform.scale(bg_img, (self.screen.get_width(), self.screen.get_height()))
+
+        # Load custom font
+        font_path = os.path.join("assets", "fonts", "Daydream.ttf")
+        game_over_font = pygame.font.Font(font_path, 50)
+
+        self.screen.blit(bg_img, (0, 0))  # Set background
+
+        # Text content
+        message = "Game Over! Press any key to exit."
+
+        # Wrap text dynamically
+        max_width = self.screen.get_width() - 100  # Keep some padding
+        wrapped_lines = wrap_text(message, game_over_font, max_width)
+
+        # Render and center each line
+        start_y = self.screen.get_height() // 2 - (len(wrapped_lines) * 30 // 2)  # Center vertically
+        for line in wrapped_lines:
+            text_surface = game_over_font.render(line, True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(self.screen.get_width() // 2, start_y))
+            self.screen.blit(text_surface, text_rect)
+            start_y += 50  # Space between lines
+
         pygame.display.flip()
+
+        # Wait for user input to exit
         waiting = True
         while waiting:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN or event.type == pygame.QUIT:
                     waiting = False
+
 
 # Import dependencies at the end to avoid circular issues.
 import os
