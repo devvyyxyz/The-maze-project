@@ -69,6 +69,7 @@ def main():
             else:
                 screen = pygame.display.set_mode(settings["resolution"])
 
+
         elif choice == "exit":
             pygame.quit()
             return

@@ -13,16 +13,19 @@ class SettingsMenu:
         self.volume = self.settings.get("volume", 50)
         self.update_handle_position()
 
+        # Ensure default settings exist
+        self.settings.setdefault("resolution", (800, 600))
+        self.settings.setdefault("fullscreen", False)
+
         # Resolutions
         self.resolutions = [(800, 600), (1024, 768), (1280, 720), (1920, 1080)]
-        default_resolution = (800, 600)  # Ensure a valid resolution
-        self.current_resolution_index = self.resolutions.index(self.settings.get("resolution", default_resolution))
-        self.settings["resolution"] = self.resolutions[self.current_resolution_index]  # Ensure valid setting
+        self.current_resolution_index = self.resolutions.index(self.settings["resolution"])
 
-        self.fullscreen = self.settings.get("fullscreen", False)
+        self.fullscreen = self.settings["fullscreen"]
 
         self.options = ["Volume", "Resolution", "Fullscreen", "Apply", "Back"]
         self.selected_option = 0
+        self.option_rects = []  # Store clickable areas
 
     def update_handle_position(self):
         ratio = self.volume / 100.0
@@ -36,9 +39,8 @@ class SettingsMenu:
         self.update_handle_position()
 
     def toggle_fullscreen(self):
-        self.settings.setdefault("fullscreen", False)  # Ensure fullscreen key exists
-        self.fullscreen = self.settings["fullscreen"]
-
+        self.fullscreen = not self.fullscreen
+        self.settings["fullscreen"] = self.fullscreen
 
     def change_resolution(self):
         """Cycle through available resolutions."""
@@ -61,6 +63,8 @@ class SettingsMenu:
             title = self.font.render("Settings", True, (255, 255, 255))
             self.screen.blit(title, (self.screen.get_width() // 2 - title.get_width() // 2, 50))
 
+            self.option_rects = []  # Reset option rectangles
+
             # Display settings options
             for i, option in enumerate(self.options):
                 color = (0, 255, 0) if i == self.selected_option else (255, 255, 255)
@@ -77,7 +81,15 @@ class SettingsMenu:
                 text_rect = text_surface.get_rect(center=(self.screen.get_width() // 2, 150 + i * 50))
                 self.screen.blit(text_surface, text_rect)
 
+                self.option_rects.append((text_rect, option))  # Store clickable area
+
+            # Draw the volume slider
+            pygame.draw.rect(self.screen, (100, 100, 100), self.slider_rect)
+            pygame.draw.rect(self.screen, (200, 200, 200), self.slider_handle_rect)
+
             pygame.display.flip()
+
+            mouse_pos = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -90,24 +102,40 @@ class SettingsMenu:
                     elif event.key == pygame.K_UP:
                         self.selected_option = (self.selected_option - 1) % len(self.options)
                     elif event.key == pygame.K_RETURN:
-                        if self.options[self.selected_option] == "Volume":
-                            pass  # Volume is adjusted using the slider
-                        elif self.options[self.selected_option] == "Resolution":
-                            self.change_resolution()
-                        elif self.options[self.selected_option] == "Fullscreen":
-                            self.toggle_fullscreen()
-                        elif self.options[self.selected_option] == "Apply":
-                            self.apply_changes()
-                        elif self.options[self.selected_option] == "Back":
-                            self.running = False
-
+                        self.handle_selection()
+                
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.slider_rect.collidepoint(event.pos) or self.slider_handle_rect.collidepoint(event.pos):
                         self.set_volume_from_mouse(event.pos)
+
+                    # Check if the user clicked on a menu option
+                    for index, (rect, option) in enumerate(self.option_rects):
+                        if rect.collidepoint(event.pos):
+                            self.selected_option = index
+                            self.handle_selection()
+
                 if event.type == pygame.MOUSEMOTION:
                     if event.buttons[0]:  # Left mouse button held
                         self.set_volume_from_mouse(event.pos)
 
+            # Highlight option if the mouse is hovering over it
+            for index, (rect, option) in enumerate(self.option_rects):
+                if rect.collidepoint(mouse_pos):
+                    self.selected_option = index
+
             clock.tick(60)
 
         return "back", self.settings
+
+    def handle_selection(self):
+        """Handles selection when ENTER is pressed or a menu option is clicked."""
+        if self.options[self.selected_option] == "Volume":
+            pass  # Volume is adjusted using the slider
+        elif self.options[self.selected_option] == "Resolution":
+            self.change_resolution()
+        elif self.options[self.selected_option] == "Fullscreen":
+            self.toggle_fullscreen()
+        elif self.options[self.selected_option] == "Apply":
+            self.apply_changes()
+        elif self.options[self.selected_option] == "Back":
+            self.running = False
