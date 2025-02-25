@@ -6,7 +6,6 @@ class Player:
         self.col = col
         self.tile_size = tile_size
         self.controls = controls
-        # 'skin' is a pygame Surface representing the player's appearance.
         self.skin = pygame.transform.scale(skin, (tile_size, tile_size))
     
     def move(self, direction, maze):

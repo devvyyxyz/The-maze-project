@@ -13,7 +13,6 @@ class Maze:
         self.rows = rows
         self.cols = cols
         self.tile_size = tile_size
-        # Create a 2D grid of cells.
         self.grid = [[Cell(row, col) for col in range(cols)] for row in range(rows)]
         if generate:
             self.generate_maze()
@@ -40,16 +39,12 @@ class Maze:
     def get_unvisited_neighbors(self, cell):
         neighbors = []
         r, c = cell.row, cell.col
-        # Top neighbor
         if r > 0 and not self.grid[r - 1][c].visited:
             neighbors.append(self.grid[r - 1][c])
-        # Right neighbor
         if c < self.cols - 1 and not self.grid[r][c + 1].visited:
             neighbors.append(self.grid[r][c + 1])
-        # Bottom neighbor
         if r < self.rows - 1 and not self.grid[r + 1][c].visited:
             neighbors.append(self.grid[r + 1][c])
-        # Left neighbor
         if c > 0 and not self.grid[r][c - 1].visited:
             neighbors.append(self.grid[r][c - 1])
         return neighbors
@@ -57,21 +52,20 @@ class Maze:
     def remove_walls(self, current, next_cell):
         dx = next_cell.col - current.col
         dy = next_cell.row - current.row
-        if dx == 1:  # next is to the right
+        if dx == 1:
             current.walls["right"] = False
             next_cell.walls["left"] = False
-        elif dx == -1:  # next is to the left
+        elif dx == -1:
             current.walls["left"] = False
             next_cell.walls["right"] = False
-        if dy == 1:  # next is below
+        if dy == 1:
             current.walls["bottom"] = False
             next_cell.walls["top"] = False
-        elif dy == -1:  # next is above
+        elif dy == -1:
             current.walls["top"] = False
             next_cell.walls["bottom"] = False
 
     def draw(self, screen):
-        # Draw each cell’s walls.
         for row in self.grid:
             for cell in row:
                 x = cell.col * self.tile_size

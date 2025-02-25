@@ -2,15 +2,11 @@ import pygame
 
 class SettingsMenu:
     def __init__(self, screen, settings):
-        """
-        settings: a dict containing game settings (e.g. {'volume': 50})
-        """
         self.screen = screen
-        self.settings = settings.copy()  # copy to allow modifications
+        self.settings = settings.copy()
         self.font = pygame.font.SysFont("Arial", 30)
         self.running = True
 
-        # Setup a volume slider.
         self.slider_rect = pygame.Rect(300, 300, 200, 10)
         self.slider_handle_rect = pygame.Rect(0, 290, 20, 30)
         self.volume = self.settings.get("volume", 50)
