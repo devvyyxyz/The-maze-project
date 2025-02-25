@@ -3,10 +3,11 @@ import os
 import math
 
 def show_menu(screen):
-    # Load background image.
+    # Load and scale background.
     bg_path = os.path.join("assets", "background.png")
     bg_img = pygame.image.load(bg_path).convert()
-
+    bg_img = pygame.transform.scale(bg_img, (screen.get_width(), screen.get_height()))
+    
     FONT_PATH = os.path.join("assets", "fonts", "Daydream.ttf") 
     title_font = pygame.font.Font(FONT_PATH, 60)
     option_font = pygame.font.Font(FONT_PATH, 40)
@@ -30,12 +31,12 @@ def show_menu(screen):
     clock = pygame.time.Clock()
     
     while True:
-        # Draw background first.
+        # Draw background.
         screen.blit(bg_img, (0, 0))
         
         # Update title bobbing using sine.
-        t = pygame.time.get_ticks() / 1000.0  # Time in seconds.
-        amplitude = 10  # pixels up/down
+        t = pygame.time.get_ticks() / 1000.0  # time in seconds
+        amplitude = 10  # pixels to move up/down
         frequency = 0.5  # cycles per second
         offset = amplitude * math.sin(2 * math.pi * frequency * t)
         title_rect.centery = base_y + offset
@@ -67,7 +68,7 @@ def show_menu(screen):
                 elif event.key == pygame.K_RETURN:
                     return options[selected].lower()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
+                if event.button == 1:  # left mouse button
                     for i, rect in enumerate(option_rects):
                         if rect.collidepoint(event.pos):
                             return options[i].lower()

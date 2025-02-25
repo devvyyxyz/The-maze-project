@@ -1,6 +1,7 @@
 import pygame
 import os
 from menu import show_menu
+from instructions import show_instructions
 from game import Game
 from settings import SettingsMenu
 from skin_manager import SkinManager
@@ -16,18 +17,27 @@ def main():
     
     choice = show_menu(screen)
     if choice == "start":
+        # Show instructions screen before starting the game.
+        if show_instructions(screen) == "exit":
+            pygame.quit()
+            return
+
+        # Instantiate the skin manager.
         skin_manager = SkinManager(os.path.join("assets", "skins"))
-        # If either player's skin hasn't been selected, run skin selection.
+        # If a player's skin hasn't been selected, run skin selection.
         if settings["player1_skin"] is None:
             chosen_skin1 = skin_selection_menu(screen, skin_manager, "Player 1: Choose Your Skin")
             if chosen_skin1 is None:
+                pygame.quit()
                 return
             settings["player1_skin"] = chosen_skin1
         if settings["player2_skin"] is None:
             chosen_skin2 = skin_selection_menu(screen, skin_manager, "Player 2: Choose Your Skin")
             if chosen_skin2 is None:
+                pygame.quit()
                 return
             settings["player2_skin"] = chosen_skin2
+
         game = Game(screen, settings)
         game.run()
     elif choice == "settings":

@@ -2,10 +2,11 @@ import pygame
 import os
 
 def skin_selection_menu(screen, skin_manager, title_text):
-    # Load background image.
+    # Load and scale background image.
     bg_path = os.path.join("assets", "background.png")
     bg_img = pygame.image.load(bg_path).convert()
-
+    bg_img = pygame.transform.scale(bg_img, (screen.get_width(), screen.get_height()))
+    
     font = pygame.font.SysFont("Arial", 30)
     selected = 0
     clock = pygame.time.Clock()
@@ -13,12 +14,12 @@ def skin_selection_menu(screen, skin_manager, title_text):
     
     while True:
         screen.blit(bg_img, (0, 0))
-        # Draw the title for the skin selection.
+        # Draw title.
         title_surf = font.render(title_text, True, (255, 255, 255))
         title_rect = title_surf.get_rect(center=(screen.get_width() // 2, 100))
         screen.blit(title_surf, title_rect)
         
-        # Display each skin as a thumbnail.
+        # Display available skins as thumbnails.
         for i, skin_name in enumerate(available):
             skin_img = skin_manager.get_skin(skin_name)
             preview = pygame.transform.scale(skin_img, (80, 80))
