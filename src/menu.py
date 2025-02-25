@@ -21,7 +21,7 @@ def show_menu(screen):
     option_rects = []
     start_y = 300
     spacing = 60
-    
+
     for i, option in enumerate(options):
         surf = option_font.render(option, True, (255, 255, 255))
         rect = surf.get_rect(center=(screen.get_width() // 2, start_y + i * spacing))
@@ -44,14 +44,17 @@ def show_menu(screen):
         screen.blit(title_text, title_rect)
         
         mouse_pos = pygame.mouse.get_pos()
-        
+
         # Draw options with hover highlighting.
         for i, option in enumerate(options):
-            if option_rects[i].collidepoint(mouse_pos):
+            if option_rects[i].collidepoint(mouse_pos):  # Mouse hover
                 text_color = (0, 255, 0)
-                selected = i
+                selected = i  # Auto-select on hover
+            elif i == selected:  # Selected option (via keys)
+                text_color = (0, 255, 0)
             else:
                 text_color = (255, 255, 255)
+
             option_surf = option_font.render(option, True, text_color)
             screen.blit(option_surf, option_rects[i])
         
@@ -66,10 +69,12 @@ def show_menu(screen):
                 elif event.key == pygame.K_DOWN:
                     selected = (selected + 1) % len(options)
                 elif event.key == pygame.K_RETURN:
-                    return options[selected].lower()
+                    return options[selected].lower()  # "start", "settings", or "exit"
+
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # left mouse button
+                if event.button == 1:  # Left mouse button
                     for i, rect in enumerate(option_rects):
                         if rect.collidepoint(event.pos):
                             return options[i].lower()
+
         clock.tick(30)
